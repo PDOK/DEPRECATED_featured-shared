@@ -20,7 +20,6 @@ public class HandlerMaps {
         writers = new HashMap<>();
         writers.put(NilAttribute.class, new TransitHandlers.NilAttributeWriteHandler());
         writers.put(LocalDateTime.class, new TransitHandlers.JodaLocalDateTimeWriteHandler());
-        writers.put(DateTime.class, new TransitHandlers.JodaDateTimeWriteHandler());
         writers.put(LocalDate.class, new TransitHandlers.JodaLocalDateWriteHandler());
         writers.put(Integer.class, new TransitHandlers.IntegerWriteHandler());
 

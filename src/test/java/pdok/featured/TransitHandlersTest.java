@@ -22,13 +22,13 @@ public class TransitHandlersTest {
     }
 
     @Test
-    public void DateTimeTest() {
-        DateTime dt = DateTime.now();
-        String serial = Serializer.toJson(dt);
+    public void LocalDateTimeZeroTest() {
+        LocalDateTime ldt = new LocalDateTime(1970,1,1,0,0,0);
+        String serial = "[\"~#lm\",0]";
 
         LocalDateTime deserial = (LocalDateTime) Serializer.fromJson(serial);
 
-        Assert.assertEquals(dt.toLocalDateTime(), deserial);
+        Assert.assertEquals(ldt, deserial);
     }
 
     @Test
