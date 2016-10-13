@@ -2,26 +2,28 @@
     (:require [clojure.test :refer :all]
       [pdok.featured.feature :refer :all]
       [clojure.java.io :refer :all])
-    (:import [pdok.featured.xslt TransformXSLT]
-      [nl.pdok.gml3.impl GMLMultiVersionParserImpl]))
+    (:import
+      [pdok.featured.xslt TransformXSLT]
+      [nl.pdok.gml3.impl GMLMultiVersionParserImpl]
+      [pdok.featured GeometryAttribute]))
 
 
 (def gml-with-hole (slurp (resource "gml/gml-with-hole.gml")))
 
-(def gml-object-with-hole {"type" "gml" "gml" gml-with-hole})
+(def gml-object-with-hole (GeometryAttribute. "gml" gml-with-hole))
 
 (def gml-with-arc (slurp (resource "gml/gml-with-arc.gml")))
 (def gml-object-with-arc {"type" "gml" "gml" gml-with-arc})
 
 (def gml-without-curves (slurp (resource "gml/gml-without-curves.gml")))
-(def gml-object-without-curves {"type" "gml" "gml" gml-without-curves})
+(def gml-object-without-curves (GeometryAttribute. "gml" gml-without-curves))
 
 (def gml-surface (slurp (resource "gml/gml-surface.gml")))
 
 (def gml-one-curve (slurp (resource "gml/gml-one-curve.gml")))
 
 (def gml-surface-with-more-elements (slurp (resource "gml/gml-surface-with-more-elements.gml")))
-(def gml-object-surface-with-more-elements {"type" "gml" "gml" gml-surface-with-more-elements})
+(def gml-object-surface-with-more-elements (GeometryAttribute. "gml" gml-surface-with-more-elements))
 
 (def broken-gml (slurp (resource "gml/broken-gml.gml")))
 

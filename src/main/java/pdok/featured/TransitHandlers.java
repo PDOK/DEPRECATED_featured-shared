@@ -1,10 +1,13 @@
 package pdok.featured;
 
+import com.cognitect.transit.ArrayReader;
 import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
+import com.cognitect.transit.ArrayReadHandler;
+import com.cognitect.transit.TransitFactory;
 import org.joda.time.*;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by raymond on 2-8-16.
@@ -36,12 +39,36 @@ public class TransitHandlers {
         }
     }
 
+    public static class GeometryAttributeReadHandler implements ReadHandler<GeometryAttribute, List<Object>> {
+
+        @Override
+        public GeometryAttribute fromRep(List<Object> list){
+            return new GeometryAttribute((String) list.get(0), list.get(1), (Integer) list.get(2));
+        }
+    }
+
+    public static class GeometryAttributeWriteHandler extends AbstractWriteHandler<GeometryAttribute, Object>{
+
+        @Override
+        public String tag(GeometryAttribute geometryAttribute) { return "ga"; }
+
+        @Override
+        public List<Object> rep(GeometryAttribute geometryAttribute) {
+            ArrayList<Object> ga = new ArrayList<>();
+            ga.add(geometryAttribute.getType());
+            ga.add(geometryAttribute.getGeometry());
+            ga.add(geometryAttribute.getSrid());
+            ga.add(geometryAttribute.getTiles());
+            return ga;
+            }
+    }
+
     public static class JodaLocalDateTimeReadHandler implements ReadHandler<LocalDateTime, Long> {
 
         @Override
         public LocalDateTime fromRep(Long s) {
-            Chronology UTC = DateTimeUtils.getChronology(null).withUTC();
-            return new LocalDateTime(s, UTC);
+            DateTime dt = new DateTime(s, DateTimeZone.getDefault());
+            return new LocalDateTime(dt.withZoneRetainFields(DateTimeZone.getDefault()).getMillis());
         }
     }
 
@@ -54,7 +81,20 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDateTime o) {
-            return (new Date(o.toDateTime(DateTimeZone.UTC).getMillis())).getTime();
+            return (new Date(o.toDateTime().getMillis())).getTime();
+        }
+    }
+
+    public static class JodaDateTimeWriteHandler extends AbstractWriteHandler<DateTime, Long> {
+
+        @Override
+        public String tag(DateTime o) {
+            return "lm";
+        }
+
+        @Override
+        public Long rep(DateTime o) {
+            return (new Date(o.getMillis())).getTime();
         }
     }
 
