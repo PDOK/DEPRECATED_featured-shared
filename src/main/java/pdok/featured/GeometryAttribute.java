@@ -36,9 +36,9 @@ public class GeometryAttribute {
         return tiles;
     }
 
-    // tiles is will be computed outside of this class, so a set-method is necessary
-    public void setTiles (final Collection<Integer> tiles){
-        this.tiles = Collections.unmodifiableCollection(tiles);
+    // the tiles will be computed outside of this class, so a set-method is necessary
+    public void setTiles (Collection<Integer> tiles){
+        this.tiles = tiles;
     }
 
     @Override
