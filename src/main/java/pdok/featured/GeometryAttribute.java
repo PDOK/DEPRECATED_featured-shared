@@ -1,6 +1,5 @@
 package pdok.featured;
 
-import pdok.featured.tiles.TilesHelper;
 import java.util.*;
 
 /**
@@ -11,6 +10,7 @@ public class GeometryAttribute {
     private String type;
     private Object geometry;
     private Integer srid;
+    private Collection<Integer> tiles;
 
     public GeometryAttribute(String type, Object geometry) {
         this(type, geometry, null);
@@ -33,8 +33,12 @@ public class GeometryAttribute {
     }
 
     public Collection<Integer> getTiles(){
-        // TODO caching
-        return TilesHelper.nl(this);
+        return tiles;
+    }
+
+    // tiles is will be computed outside of this class, so a set-method is necessary
+    public void setTiles (final Collection<Integer> tiles){
+        this.tiles = Collections.unmodifiableCollection(tiles);
     }
 
     @Override
