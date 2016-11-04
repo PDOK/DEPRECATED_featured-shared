@@ -67,8 +67,8 @@ public class TransitHandlers {
 
         @Override
         public LocalDateTime fromRep(Long s) {
-            DateTime dt = new DateTime(s, DateTimeZone.getDefault());
-            return new LocalDateTime(dt.withZoneRetainFields(DateTimeZone.getDefault()).getMillis());
+            Chronology UTC = DateTimeUtils.getChronology(null).withUTC();
+            return new LocalDateTime(s, UTC);
         }
     }
 
@@ -81,22 +81,10 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDateTime o) {
-            return (new Date(o.toDateTime().getMillis())).getTime();
+            return (new Date(o.toDateTime(DateTimeZone.UTC).getMillis())).getTime();
         }
     }
 
-    public static class JodaDateTimeWriteHandler extends AbstractWriteHandler<DateTime, Long> {
-
-        @Override
-        public String tag(DateTime o) {
-            return "lm";
-        }
-
-        @Override
-        public Long rep(DateTime o) {
-            return (new Date(o.getMillis())).getTime();
-        }
-    }
 
     public static class JodaLocalDateReadHandler implements ReadHandler<LocalDate, Long> {
 
