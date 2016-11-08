@@ -10,7 +10,7 @@ public class GeometryAttribute {
     private String type;
     private Object geometry;
     private Integer srid;
-    private Collection<Integer> tiles;
+    private Set<Integer> tiles;
 
     public GeometryAttribute(String type, Object geometry) {
         this(type, geometry, null);
@@ -32,12 +32,12 @@ public class GeometryAttribute {
     public Integer getSrid() { return srid;
     }
 
-    public Collection<Integer> getTiles(){
+    public Set<Integer> getTiles(){
         return tiles;
     }
 
     // the tiles will be computed outside of this class, so a set-method is necessary
-    public void setTiles (Collection<Integer> tiles){
+    public void setTiles (Set<Integer> tiles){
         this.tiles = tiles;
     }
 
