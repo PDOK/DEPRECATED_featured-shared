@@ -50,13 +50,23 @@
 (defmethod valid-geometry? "jts" [obj]
            true)
 
-(defmulti as-gml (fn [^GeometryAttribute obj] (lower-case (.getType obj))))
-(defmethod as-gml "gml" [^GeometryAttribute obj] (when-let [gml (.getGeometry obj)]
-                                        (str/trim (reduce str (str/split-lines (str/trim-newline (str/replace gml #"<\?[^\?]*\?>" "")))))))
+(defn- geometry-attribute-dispather [^GeometryAttribute obj]
+  (when obj (-> obj .getType lower-case)))
+
+(defmulti as-gml (fn [^GeometryAttribute obj]
+                   (geometry-attribute-dispather obj)))
+
 (defmethod as-gml :default [obj] nil)
 
+(defmethod as-gml "gml" [^GeometryAttribute obj]
+  (when-let [gml (.getGeometry obj)]
+    (str/trim (reduce str (str/split-lines (str/trim-newline (str/replace gml #"<\?[^\?]*\?>" "")))))))
+
+
+
 (defmulti as-jts (fn [^GeometryAttribute obj]
-                   (lower-case (.getType obj))))
+                   (geometry-attribute-dispather obj)))
+
 (defmethod as-jts :default [_] nil)
 
 (def gml->jts-cache (atom (cache/lu-cache-factory {} :threshold 30000)))
@@ -92,11 +102,12 @@
               (.transform Transformer/RDToETRS89 geometry))))
 
 
-(defmulti as-simple-gml (fn [obj] lower-case (get obj "type")))
-(defmethod as-simple-gml "gml" [obj]
-           (when-let [gml (get obj "gml")]
+(defmulti as-simple-gml (fn [^GeometryAttribute obj]
+                          (geometry-attribute-dispather obj)))
+(defmethod as-simple-gml "gml" [^GeometryAttribute obj]
+           (when-let [gml (as-gml obj)]
                      (.transform ^TransformXSLT simple-gml-transfomer gml)))
-(defmethod as-simple-gml :default [obj] nil)
+(defmethod as-simple-gml :default [_] nil)
 
 (defmulti as-wkt (fn [obj] lower-case (get obj "type")))
 (defmethod as-wkt "gml" [obj]
@@ -133,7 +144,7 @@
 
 (defmulti geometry-group
           "returns :point, :line or :polygon"
-          (fn [^GeometryAttribute obj] (when obj (-> obj (.getType) lower-case ))))
+          (fn [^GeometryAttribute obj] (geometry-attribute-dispather obj)))
 
 (defmethod geometry-group :default [_] nil)
 
@@ -162,7 +173,8 @@
        (let [replacement-list (partition 2 replacements)]
             (reduce #(apply str/replace %1 %2) content replacement-list)))
 
-(defmulti as-stufgeo-gml (fn [^GeometryAttribute obj] (lower-case (.getType obj))))
+(defmulti as-stufgeo-gml (fn [^GeometryAttribute obj]
+                           (geometry-attribute-dispather obj)))
 (defmethod as-stufgeo-gml "gml" [^GeometryAttribute obj]
            (when (.getGeometry obj)
                  (map-replace (as-gml obj) #"(<gml:Curve .+</gml:Curve>)" "<imgeo:lijn>$1</imgeo:lijn>"
@@ -178,7 +190,8 @@
 ; The StUF-Geo XSD contains a bug in the "Overig bouwwerk" BGT type. While all other types use camelCase field names in
 ; the GML part, Overig bouwwerk uses lowercase. As a workaround, this is a separate Mustache function for Overig
 ; bouwwerk that adds the lowercase bug after applying the regular GML transformation.
-(defmulti as-stufgeo-gml-lc (fn [^GeometryAttribute obj] (lower-case (.getType obj))))
+(defmulti as-stufgeo-gml-lc (fn [^GeometryAttribute obj]
+                              (geometry-attribute-dispather obj)))
 (defmethod as-stufgeo-gml-lc "gml" [^GeometryAttribute obj]
            (when (.getGeometry obj)
                  (map-replace (as-stufgeo-gml obj) #"(<imgeo:multiVlak>.+</imgeo:multiVlak>)" "<imgeo:multivlak>$1</imgeo:multivlak>"

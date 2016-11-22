@@ -33,6 +33,10 @@
 (def gml3-etrs-parser
   (GMLMultiVersionParserImpl. 0.01 4258))
 
+
+(deftest test-as-jts-nil
+  (is (= nil (as-jts nil))))
+
 (deftest test-as-jts-with-curves
          (is (re-find #"curve" (as-gml gml-object-with-hole)))
          (is (not (re-find #"curve" (as-gml gml-object-without-curves))))
