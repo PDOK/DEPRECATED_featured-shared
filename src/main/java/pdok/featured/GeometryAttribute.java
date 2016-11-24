@@ -50,7 +50,8 @@ public class GeometryAttribute {
 
         if (!getType().equals(that.getType())) return false;
         if (!getGeometry().equals(that.getGeometry())) return false;
-        return getSrid() != null ? getSrid().equals(that.getSrid()) : that.getSrid() == null;
+        if (getSrid() != null ? !getSrid().equals(that.getSrid()) : that.getSrid() != null) return false;
+        return getTiles() != null ? getTiles().equals(that.getTiles()) : that.getTiles() == null;
 
     }
 
@@ -59,6 +60,10 @@ public class GeometryAttribute {
         int result = getType().hashCode();
         result = 31 * result + getGeometry().hashCode();
         result = 31 * result + (getSrid() != null ? getSrid().hashCode() : 0);
+        result = 31 * result + (getTiles() != null ? getTiles().hashCode() : 0);
         return result;
     }
 }
+
+
+

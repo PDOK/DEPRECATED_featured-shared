@@ -43,7 +43,13 @@ public class TransitHandlers {
 
         @Override
         public GeometryAttribute fromRep(List<Object> list){
-            return new GeometryAttribute((String) list.get(0), list.get(1), (Integer) list.get(2));
+            String type = (String) list.get(0);
+            Object geometry = list.get(1);
+            Integer srid = (Integer) list.get(2);
+            Set<Integer> tiles = (Set<Integer>) list.get(3);
+            GeometryAttribute ga = new GeometryAttribute(type, geometry, srid);
+            ga.setTiles(tiles);
+            return ga;
         }
     }
 
@@ -60,7 +66,7 @@ public class TransitHandlers {
             ga.add(geometryAttribute.getSrid());
             ga.add(geometryAttribute.getTiles());
             return ga;
-            }
+        }
     }
 
     public static class JodaLocalDateTimeReadHandler implements ReadHandler<LocalDateTime, Long> {
