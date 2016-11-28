@@ -1,10 +1,7 @@
 package pdok.featured;
 
-import com.cognitect.transit.ArrayReader;
 import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
-import com.cognitect.transit.ArrayReadHandler;
-import com.cognitect.transit.TransitFactory;
 import org.joda.time.*;
 
 import java.util.*;

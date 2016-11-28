@@ -1,6 +1,6 @@
 (ns pdok.featured.tiles-java
   (:require [pdok.featured.tiles :as tiles])
-  (:import  [pdok.featured GeometryAttribute]))
+  (:import [pdok.featured GeometryAttribute]))
 
 (gen-class
   :name pdok.featured.tiles.TilesHelper

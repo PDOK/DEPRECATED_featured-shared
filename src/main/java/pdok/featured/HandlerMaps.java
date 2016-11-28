@@ -1,7 +1,6 @@
 package pdok.featured;
 
 import com.cognitect.transit.*;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
