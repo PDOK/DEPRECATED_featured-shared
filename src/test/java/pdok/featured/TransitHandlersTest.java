@@ -66,10 +66,10 @@ public class TransitHandlersTest {
 
         GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517</gml:pos></gml:Point>", 28992);
         String serial = Serializer.toJson(ga);
-        ga.setTiles(TilesHelper.nl(ga));
 
         GeometryAttribute deserial = (GeometryAttribute) Serializer.fromJson(serial);
         Assert.assertEquals(ga, deserial);
+
     }
 
     @Test
