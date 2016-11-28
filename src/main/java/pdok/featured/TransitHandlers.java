@@ -4,7 +4,7 @@ import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
 import org.joda.time.*;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by raymond on 2-8-16.
@@ -36,6 +36,36 @@ public class TransitHandlers {
         }
     }
 
+    public static class GeometryAttributeReadHandler implements ReadHandler<GeometryAttribute, List<Object>> {
+
+        @Override
+        public GeometryAttribute fromRep(List<Object> list){
+            String type = (String) list.get(0);
+            Object geometry = list.get(1);
+            Integer srid = (Integer) list.get(2);
+            Set<Integer> tiles = (Set<Integer>) list.get(3);
+            GeometryAttribute ga = new GeometryAttribute(type, geometry, srid);
+            ga.setTiles(tiles);
+            return ga;
+        }
+    }
+
+    public static class GeometryAttributeWriteHandler extends AbstractWriteHandler<GeometryAttribute, Object>{
+
+        @Override
+        public String tag(GeometryAttribute geometryAttribute) { return "ga"; }
+
+        @Override
+        public List<Object> rep(GeometryAttribute geometryAttribute) {
+            ArrayList<Object> ga = new ArrayList<>();
+            ga.add(geometryAttribute.getType());
+            ga.add(geometryAttribute.getGeometry());
+            ga.add(geometryAttribute.getSrid());
+            ga.add(geometryAttribute.getTiles());
+            return ga;
+        }
+    }
+
     public static class JodaLocalDateTimeReadHandler implements ReadHandler<LocalDateTime, Long> {
 
         @Override
@@ -57,6 +87,7 @@ public class TransitHandlers {
             return (new Date(o.toDateTime(DateTimeZone.UTC).getMillis())).getTime();
         }
     }
+
 
     public static class JodaLocalDateReadHandler implements ReadHandler<LocalDate, Long> {
 
