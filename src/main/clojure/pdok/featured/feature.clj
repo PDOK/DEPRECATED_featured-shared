@@ -50,11 +50,11 @@
 (defmethod valid-geometry? "jts" [obj]
            true)
 
-(defn- geometry-attribute-dispather [^GeometryAttribute obj]
+(defn- geometry-attribute-dispatcher [^GeometryAttribute obj]
   (when obj (-> obj .getType lower-case)))
 
 (defmulti as-gml (fn [^GeometryAttribute obj]
-                   (geometry-attribute-dispather obj)))
+                   (geometry-attribute-dispatcher obj)))
 
 (defmethod as-gml :default [obj] nil)
 
@@ -65,7 +65,7 @@
 
 
 (defmulti as-jts (fn [^GeometryAttribute obj]
-                   (geometry-attribute-dispather obj)))
+                   (geometry-attribute-dispatcher obj)))
 
 (defmethod as-jts :default [_] nil)
 
@@ -103,7 +103,7 @@
 
 
 (defmulti as-simple-gml (fn [^GeometryAttribute obj]
-                          (geometry-attribute-dispather obj)))
+                          (geometry-attribute-dispatcher obj)))
 (defmethod as-simple-gml "gml" [^GeometryAttribute obj]
            (when-let [gml (as-gml obj)]
                      (.transform ^TransformXSLT simple-gml-transfomer gml)))
@@ -144,7 +144,7 @@
 
 (defmulti geometry-group
           "returns :point, :line or :polygon"
-          (fn [^GeometryAttribute obj] (geometry-attribute-dispather obj)))
+          (fn [^GeometryAttribute obj] (geometry-attribute-dispatcher obj)))
 
 (defmethod geometry-group :default [_] nil)
 
@@ -174,7 +174,7 @@
             (reduce #(apply str/replace %1 %2) content replacement-list)))
 
 (defmulti as-stufgeo-gml (fn [^GeometryAttribute obj]
-                           (geometry-attribute-dispather obj)))
+                           (geometry-attribute-dispatcher obj)))
 (defmethod as-stufgeo-gml "gml" [^GeometryAttribute obj]
            (when (.getGeometry obj)
                  (map-replace (as-gml obj) #"(<gml:Curve .+</gml:Curve>)" "<imgeo:lijn>$1</imgeo:lijn>"
@@ -191,7 +191,7 @@
 ; the GML part, Overig bouwwerk uses lowercase. As a workaround, this is a separate Mustache function for Overig
 ; bouwwerk that adds the lowercase bug after applying the regular GML transformation.
 (defmulti as-stufgeo-gml-lc (fn [^GeometryAttribute obj]
-                              (geometry-attribute-dispather obj)))
+                              (geometry-attribute-dispatcher obj)))
 (defmethod as-stufgeo-gml-lc "gml" [^GeometryAttribute obj]
            (when (.getGeometry obj)
                  (map-replace (as-stufgeo-gml obj) #"(<imgeo:multiVlak>.+</imgeo:multiVlak>)" "<imgeo:multivlak>$1</imgeo:multivlak>"
