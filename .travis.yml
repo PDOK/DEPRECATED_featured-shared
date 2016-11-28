@@ -5,9 +5,8 @@ jdk:
  - oraclejdk8
 
 before_install:
- - wget https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip
- - unzip -qq apache-maven-3.3.9-bin.zip
- - export M2_HOME=$PWD/apache-maven-3.3.9
+ - if [ ! -f "$HOME/apache-maven-3.3.9/bin/mvn" ]; then wget https://archive.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.zip && unzip -qq apache-maven-3.3.9-bin.zip -d $HOME; fi
+ - export M2_HOME=$HOME/apache-maven-3.3.9
  - export PATH=$M2_HOME/bin:$PATH
 
 deploy:
@@ -24,3 +23,4 @@ before_deploy:
 cache:
   directories:
     - $HOME/.m2
+    - $HOME/apache-maven-3.3.9
