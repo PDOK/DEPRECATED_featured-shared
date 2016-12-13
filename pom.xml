@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.pdok</groupId>
     <artifactId>featured-shared</artifactId>
-    <version>1.0-rc6</version>
+    <version>1.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>Featured Shared Objects</description>
     <url>https://github.com/PDOK/featured-shared</url>
