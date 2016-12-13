@@ -163,6 +163,10 @@
             <id>osgeo</id>
             <url>http://download.osgeo.org/webdav/geotools/</url>
         </repository>
+        <repository>
+            <id>oss mirror</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -230,7 +234,7 @@
         <dependency>
             <groupId>nl.pdok</groupId>
             <artifactId>gml3-jts</artifactId>
-            <version>0.1.6</version>
+            <version>0.1.7</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.geotools</groupId>
