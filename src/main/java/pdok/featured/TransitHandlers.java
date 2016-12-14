@@ -4,8 +4,6 @@ import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
 import org.joda.time.*;
 
-import java.util.Date;
-
 /**
  * Created by raymond on 2-8-16.
  */
@@ -40,8 +38,7 @@ public class TransitHandlers {
 
         @Override
         public LocalDateTime fromRep(Long s) {
-            DateTime dt = new DateTime(s, DateTimeZone.getDefault());
-            return new LocalDateTime(dt.withZoneRetainFields(DateTimeZone.getDefault()).getMillis());
+            return new LocalDateTime(s, DateTimeZone.UTC);
         }
     }
 
@@ -54,7 +51,7 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDateTime o) {
-            return (new Date(o.toDateTime().getMillis())).getTime();
+            return o.toDateTime(DateTimeZone.UTC).getMillis();
         }
     }
 
@@ -67,7 +64,7 @@ public class TransitHandlers {
 
         @Override
         public Long rep(DateTime o) {
-            return (new Date(o.getMillis())).getTime();
+            return o.toDateTime(DateTimeZone.getDefault()).withZoneRetainFields(DateTimeZone.UTC).getMillis();
         }
     }
 
@@ -75,7 +72,7 @@ public class TransitHandlers {
 
         @Override
         public LocalDate fromRep(Long s) {
-            return new DateTime(s, DateTimeZone.getDefault()).toLocalDate();
+            return new LocalDateTime(s, DateTimeZone.UTC).toLocalDate();
         }
     }
 
@@ -88,7 +85,7 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDate o) {
-            return (new Date(o.toDateTime(LocalTime.MIDNIGHT).getMillis())).getTime();
+            return o.toDateTimeAtStartOfDay(DateTimeZone.UTC).getMillis();
         }
     }
 
