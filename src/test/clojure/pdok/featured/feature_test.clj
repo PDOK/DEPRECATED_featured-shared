@@ -77,3 +77,9 @@
          "Test if a geometry is correctly transformed from/to RD to ETRS89"
          (is (= (-> bag-gml-in-rd gml3-as-jts as-etrs89 jts-as-wkt) (-> bag-gml-in-etrs89 gml3-in-etrs89-as-jts jts-as-wkt))))
 
+(deftest geometry-is-nil
+  (is (nil? (valid-geometry? nil)))
+  (is (nil? (as-gml nil)))
+  (is (nil? (as-wkt nil)) )
+  (is (nil? (as-jts nil))))
+

@@ -40,18 +40,23 @@
       (if-not (nil? jts)
               (.write ^WKTWriter wkt-writer jts)))
 
-(defmulti valid-geometry? (fn [^GeometryAttribute obj] (lower-case (.getType obj))))
-(defmethod valid-geometry? :default [_] nil)
-(defmethod valid-geometry? "gml" [^GeometryAttribute obj]
-           (if (.getGeometry obj) true false))
-(defmethod valid-geometry? "wkt" [^GeometryAttribute obj]
-           (if (.getGeometry obj) true false))
-
-(defmethod valid-geometry? "jts" [obj]
-           true)
-
 (defn- geometry-attribute-dispatcher [^GeometryAttribute obj]
   (when obj (-> obj .getType lower-case)))
+
+(defmulti valid-geometry? (fn [^GeometryAttribute obj]
+                            (geometry-attribute-dispatcher obj)))
+
+(defmethod valid-geometry? :default [_] nil)
+
+(defmethod valid-geometry? "gml" [^GeometryAttribute obj]
+  (if (.getGeometry obj) true false))
+
+(defmethod valid-geometry? "wkt" [^GeometryAttribute obj]
+  (if (.getGeometry obj) true false))
+
+(defmethod valid-geometry? "jts" [^GeometryAttribute obj]
+  (if (.getGeometry obj) true false))
+
 
 (defmulti as-gml (fn [^GeometryAttribute obj]
                    (geometry-attribute-dispatcher obj)))
@@ -109,11 +114,13 @@
                      (.transform ^TransformXSLT simple-gml-transfomer gml)))
 (defmethod as-simple-gml :default [_] nil)
 
-(defmulti as-wkt (fn [obj] lower-case (get obj "type")))
-(defmethod as-wkt "gml" [obj]
+(defmulti as-wkt (fn [^GeometryAttribute obj]
+                   (geometry-attribute-dispatcher obj)))
+(defmethod as-wkt "gml" [^GeometryAttribute obj]
            (let [jts (as-jts obj)
                  wkt (jts-as-wkt jts)]
                 wkt))
+(defmethod as-wkt :default [_] nil)
 
 
 (defn- geometry-group*
