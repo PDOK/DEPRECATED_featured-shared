@@ -234,7 +234,7 @@
         <dependency>
             <groupId>nl.pdok</groupId>
             <artifactId>gml3-jts</artifactId>
-            <version>0.1.7</version>
+            <version>0.1.8</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.geotools</groupId>
