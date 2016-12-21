@@ -10,6 +10,10 @@ import java.util.*;
  * Created by raymond on 2-8-16.
  */
 public class TransitHandlers {
+    /* This determines how LocalDate(Time)s are interpreted. The milliseconds in the database are always in UTC, i.e.
+     * LOCAL_TIME_ZONE = UTC -> LocalDateTime 1970-01-01 00:00 = timestamp 0
+     * LOCAL_TIME_ZONE = Europe/Amsterdam -> LocalDateTime 1970-01-01 01:00 = timestamp 0 */
+    private static final DateTimeZone LOCAL_TIME_ZONE = DateTimeZone.forID("Europe/Amsterdam");
 
     public static class NilAttributeReadHandler implements ReadHandler<NilAttribute, String> {
 
@@ -70,8 +74,7 @@ public class TransitHandlers {
 
         @Override
         public LocalDateTime fromRep(Long s) {
-            Chronology UTC = DateTimeUtils.getChronology(null).withUTC();
-            return new LocalDateTime(s, UTC);
+            return new LocalDateTime(s, LOCAL_TIME_ZONE);
         }
     }
 
@@ -84,7 +87,7 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDateTime o) {
-            return (new Date(o.toDateTime(DateTimeZone.UTC).getMillis())).getTime();
+            return o.toDateTime(LOCAL_TIME_ZONE).getMillis();
         }
     }
 
@@ -93,7 +96,7 @@ public class TransitHandlers {
 
         @Override
         public LocalDate fromRep(Long s) {
-            return new DateTime(s, DateTimeZone.getDefault()).toLocalDate();
+            return new LocalDateTime(s, LOCAL_TIME_ZONE).toLocalDate();
         }
     }
 
@@ -106,7 +109,7 @@ public class TransitHandlers {
 
         @Override
         public Long rep(LocalDate o) {
-            return (new Date(o.toDateTime(LocalTime.MIDNIGHT).getMillis())).getTime();
+            return o.toDateTimeAtStartOfDay(LOCAL_TIME_ZONE).getMillis();
         }
     }
 

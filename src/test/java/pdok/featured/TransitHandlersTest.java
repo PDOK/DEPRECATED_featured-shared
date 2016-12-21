@@ -24,7 +24,7 @@ public class TransitHandlersTest {
     
     @Test
     public void LocalDateTimeZeroTest() {
-        LocalDateTime ldt = new LocalDateTime(1970,1,1,0,0,0);
+        LocalDateTime ldt = new LocalDateTime(1970, 1, 1, 1, 0, 0);
         String serial = "[\"~#lm\",0]";
 
         LocalDateTime deserial = (LocalDateTime) Serializer.fromJson(serial);
