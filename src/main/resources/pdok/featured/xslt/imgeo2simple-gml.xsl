@@ -1,4 +1,9 @@
-<xsl:stylesheet version="2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fn="http://www.w3.org/2005/xpath-functions" exclude-result-prefixes="xsl xsi fn imgeo xlink">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- XSLT v2016.12.12 voor transformatie IMGeo ADE CityGML 2.1.1 naar IMGeo GML Light -->
+<xsl:stylesheet version="2.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"
+                xmlns:imgeo="http://www.geostandaarden.nl/imgeo/2.1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions" exclude-result-prefixes="xsl xsi fn imgeo xlink">
 
     <xsl:output method="xml" encoding="UTF-8" omit-xml-declaration="yes"/>
 
@@ -8,11 +13,79 @@
         <gml:MultiSurface>
             <xsl:for-each select=".//gml:surfaceMember">
                 <gml:surfaceMember>
-                    <xsl:apply-templates select="node()"/>
+                    <xsl:choose>
+                        <xsl:when test="./gml:Polygon">
+                            <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="./gml:Surface">
+                            <xsl:apply-templates/>
+                        </xsl:when>
+                    </xsl:choose>
                 </gml:surfaceMember>
             </xsl:for-each>
         </gml:MultiSurface>
-    </xsl:template> 
+    </xsl:template>
+
+    <xsl:template match="gml:Surface">
+        <gml:Surface>
+            <gml:patches>
+                <xsl:for-each select=".//gml:PolygonPatch">
+                    <gml:PolygonPatch>
+                        <xsl:choose>
+                            <xsl:when test="gml:exterior/gml:Ring">
+                                <gml:exterior>
+                                    <gml:Ring>
+                                        <gml:curveMember>
+                                            <gml:Curve>
+                                                <gml:segments>
+                                                    <xsl:apply-templates select="gml:exterior/gml:Ring/gml:curveMember/gml:Curve/gml:segments/*"/>
+                                                </gml:segments>
+                                            </gml:Curve>
+                                        </gml:curveMember>
+                                    </gml:Ring>
+                                </gml:exterior>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <gml:exterior>
+                                    <gml:LinearRing>
+                                        <gml:posList>
+                                            <xsl:value-of select=".//gml:exterior//gml:posList"/>
+                                        </gml:posList>
+                                    </gml:LinearRing>
+                                </gml:exterior>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:for-each select=".//gml:interior">
+                            <xsl:choose>
+                                <xsl:when test="gml:Ring">
+                                    <gml:interior>
+                                        <gml:Ring>
+                                            <gml:curveMember>
+                                                <gml:Curve>
+                                                    <gml:segments>
+                                                        <xsl:apply-templates select="gml:Ring/gml:curveMember/gml:Curve/gml:segments/*"/>
+                                                    </gml:segments>
+                                                </gml:Curve>
+                                            </gml:curveMember>
+                                        </gml:Ring>
+                                    </gml:interior>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <gml:interior>
+                                        <gml:LinearRing>
+                                            <gml:posList>
+                                                <xsl:value-of select=".//gml:posList"/>
+                                            </gml:posList>
+                                        </gml:LinearRing>
+                                    </gml:interior>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:for-each>
+                    </gml:PolygonPatch>
+                </xsl:for-each>
+            </gml:patches>
+        </gml:Surface>
+    </xsl:template>
 
     <xsl:template match="gml:MultiPoint">
         <gml:MultiPoint>
@@ -27,8 +100,8 @@
             </xsl:for-each>
         </gml:MultiPoint>
     </xsl:template>
-	
-    <xsl:template match="gml:Polygon|gml:PolygonPatch">
+
+    <xsl:template match="gml:Polygon">
         <gml:Polygon>
             <xsl:choose>
                 <xsl:when test="gml:exterior/gml:Ring">
@@ -96,7 +169,7 @@
             <gml:posList>
                 <xsl:value-of select=".//gml:posList"/>
             </gml:posList>
-        </gml:Arc>		
+        </gml:Arc>
     </xsl:template>
 
     <xsl:template match="gml:LineString">
