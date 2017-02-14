@@ -16,6 +16,11 @@ import com.vividsolutions.jts.geom.Geometry;
 
 public final class GMLParser {
 	
+	/**
+     * Default SRID (28992: Amersfoort RD / New)
+     */
+    public static final int DEFAULT_SRID = 28992;
+	
 	private GMLParser() {}
 	
 	public static Geometry parse(String gml) throws Exception {		
@@ -38,7 +43,9 @@ public final class GMLParser {
 			Geometry jtsGeometry = deegreeGeometry.getJTSGeometry();
 			
 			ICRS cs = deegreeGeometry.getCoordinateSystem();
-			if(cs != null) {
+			if(cs == null) {
+				jtsGeometry.setSRID(DEFAULT_SRID);
+			} else {
 				for(CRSCodeType code : cs.getCodes()) {
 					if("epsg".equals(code.getCodeSpace())) {
 						jtsGeometry.setSRID(Integer.parseInt(code.getCode()));
