@@ -2,9 +2,8 @@
     (:require [clojure.test :refer :all]
       [pdok.featured.feature :refer :all]
       [clojure.java.io :refer :all])
-    (:import
+    (:import [pdok.featured GMLParser]
       [pdok.featured.xslt TransformXSLT]
-      [nl.pdok.gml3.impl GMLMultiVersionParserImpl]
       [pdok.featured GeometryAttribute]))
 
 
@@ -29,10 +28,6 @@
 
 (def bag-gml-in-rd (slurp (resource "gml/bag-polygon-rd.gml")))
 (def bag-gml-in-etrs89 (slurp (resource "gml/bag-polygon-etrs89.gml")))
-
-(def gml3-etrs-parser
-  (GMLMultiVersionParserImpl. 0.01 4258))
-
 
 (deftest test-as-jts-nil
   (is (= nil (as-jts nil))))
@@ -71,7 +66,7 @@
          (is (nil?  (-> broken-gml gml3-as-jts jts-as-wkt))))
 
 (defn gml3-in-etrs89-as-jts [gml]
-      (.toJTSGeometry ^GMLMultiVersionParserImpl gml3-parser gml))
+      (GMLParser/parse gml))
 
 (deftest rd-to-etrs89-conversion
          "Test if a geometry is correctly transformed from/to RD to ETRS89"

@@ -4,8 +4,7 @@
       [clojure.core.cache :as cache]
       [clojure.java.io :as io]
       [clojure.tools.logging :as log])
-    (:import [nl.pdok.gml3.impl GMLMultiVersionParserImpl]
-      [pdok.featured NilAttribute]
+    (:import [pdok.featured NilAttribute GMLParser]
       [pdok.featured.xslt TransformXSLT]
       [pdok.featured.converters Transformer]
       [com.vividsolutions.jts.geom Geometry]
@@ -23,13 +22,10 @@
 
 (def simple-gml-transfomer (TransformXSLT. (io/input-stream xslt-simple-gml)))
 
-(def gml3-parser
-  (GMLMultiVersionParserImpl.))
-
 (defn gml3-as-jts [gml]
       (try
-        (.toJTSGeometry ^GMLMultiVersionParserImpl gml3-parser ^String gml)
-        (catch nl.pdok.gml3.exceptions.GML3ParseException e
+        (GMLParser/parse ^String gml)
+        (catch Exception e
           (log/error "Could not transform GML to JTS:" (.getMessage  e))
           nil)))
 

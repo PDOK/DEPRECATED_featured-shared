@@ -1,4 +1,4 @@
-<gml:Polygon srsName="urn:ogc:def:crs:EPSG:28992" xmlns:gml="http://www.opengis.net/gml">
+<gml:Polygon srsName="urn:ogc:def:crs:EPSG::28992" xmlns:gml="http://www.opengis.net/gml">
 	<gml:exterior>
 		<gml:Ring>
 			<gml:curveMember>
