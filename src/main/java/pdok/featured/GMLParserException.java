@@ -23,5 +23,4 @@ public class GMLParserException extends Exception {
 	public GMLParserException(Throwable cause) {
 		super(cause);
 	}
-
 }
