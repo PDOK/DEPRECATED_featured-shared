@@ -26,7 +26,7 @@
       (try
         (GMLParser/parse ^String gml)
         (catch Exception e
-          (log/error "Could not transform GML to JTS:" (.getMessage  e))
+          (log/error e "Could not transform GML to JTS")
           nil)))
 
 (def wkt-writer (WKTWriter.))
