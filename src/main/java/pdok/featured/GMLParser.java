@@ -19,13 +19,17 @@ public final class GMLParser {
 	/**
 	 * Default SRID (28992: Amersfoort RD / New)
 	 */
-	public static final int DEFAULT_SRID = 28992;
+	private static final int DEFAULT_SRID = 28992;
 
 	private GMLParser() {
 	}
 
 	public static Geometry parse(String gml) throws Exception {
 		try {
+			// Reintroduce quirk from previous GML parser to support BGT. Remove as soon as possible.
+			gml = gml.replace("srsName='urn:ogc:def:crs:EPSG:28992'", "srsName='urn:ogc:def:crs:EPSG::28992'")
+					.replace("srsName=\"urn:ogc:def:crs:EPSG:28992\"", "srsName=\"urn:ogc:def:crs:EPSG::28992\"");
+
 			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
 			XMLStreamReader xmlStreamReader = inputFactory.createXMLStreamReader(new StringReader(gml));
