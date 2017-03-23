@@ -23,11 +23,7 @@
 (def simple-gml-transfomer (TransformXSLT. (io/input-stream xslt-simple-gml)))
 
 (defn gml3-as-jts [gml]
-      (try
-        (GMLParser/parse ^String gml)
-        (catch Exception e
-          (log/error e "Could not transform GML to JTS")
-          nil)))
+  (GMLParser/parse ^String gml))
 
 (def wkt-writer (WKTWriter.))
 (def wkt-reader (WKTReader.))

@@ -4,7 +4,7 @@
       [clojure.java.io :refer :all])
     (:import [pdok.featured GMLParser]
       [pdok.featured.xslt TransformXSLT]
-      [pdok.featured GeometryAttribute]))
+      [pdok.featured GeometryAttribute GMLParserException]))
 
 
 (def gml-with-hole (slurp (resource "gml/gml-with-hole.gml")))
@@ -62,8 +62,8 @@
 
 (deftest test-broken-gml
          "Test converting a broken GML results in a nil geometry"
-         (is (nil?  (gml3-as-jts broken-gml)))
-         (is (nil?  (-> broken-gml gml3-as-jts jts-as-wkt))))
+         (is (thrown? GMLParserException (gml3-as-jts broken-gml)))
+         (is (thrown? GMLParserException (-> broken-gml gml3-as-jts jts-as-wkt))))
 
 (defn gml3-in-etrs89-as-jts [gml]
       (GMLParser/parse gml))
@@ -77,4 +77,3 @@
   (is (nil? (as-gml nil)))
   (is (nil? (as-wkt nil)) )
   (is (nil? (as-jts nil))))
-
