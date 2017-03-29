@@ -1,7 +1,6 @@
 (ns pdok.featured.feature
     (:refer-clojure :exclude [type])
     (:require [clojure.string :as str]
-      [clojure.core.cache :as cache]
       [clojure.java.io :as io]
       [clojure.tools.logging :as log])
     (:import [pdok.featured NilAttribute GMLParser]
@@ -66,15 +65,9 @@
 
 (defmethod as-jts :default [_] nil)
 
-(def gml->jts-cache (atom (cache/lu-cache-factory {} :threshold 30000)))
-
 (defmethod as-jts "gml" [^GeometryAttribute obj]
            (when-let [gml (.getGeometry obj)]
-                     (if (cache/has? @gml->jts-cache gml)
-                       (cache/lookup @gml->jts-cache gml)
-                       (let [jts (gml3-as-jts gml)
-                             _ (swap! gml->jts-cache #(cache/miss % gml jts))]
-                            jts))))
+             (gml3-as-jts gml)))
 
 (defmethod as-jts "jts" [^GeometryAttribute obj]
            (.getGeometry obj))
