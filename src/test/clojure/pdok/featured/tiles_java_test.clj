@@ -10,7 +10,7 @@
 (deftest test-tiles-helper
          (let [ga (GeometryAttribute. "gml"
                                       "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517</gml:pos></gml:Point>"
-                                      (Integer. 29822))]
-           (.setTiles ga (TilesHelper/nl ga))
-           (is (= 1 (count (.getTiles ga))))
-           (is (= 38309 (first (.getTiles ga))))))
+                                      (Integer. 29822))
+               tiles (TilesHelper/nl ga)]
+           (is (= 1 (count tiles)))
+           (is (= 38309 (first tiles)))))
