@@ -1,13 +1,10 @@
 package pdok.featured;
 
-import java.util.Set;
-
 public class GeometryAttribute {
 
     private String type;
     private Object geometry;
     private Integer srid;
-    private Set<Integer> tiles;
 
     public GeometryAttribute(String type, Object geometry) {
         this(type, geometry, null);
@@ -31,15 +28,6 @@ public class GeometryAttribute {
         return srid;
     }
 
-    public Set<Integer> getTiles() {
-        return tiles;
-    }
-
-    // the tiles will be computed outside of this class, so a set-method is necessary
-    public void setTiles(Set<Integer> tiles) {
-        this.tiles = tiles;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -57,10 +45,8 @@ public class GeometryAttribute {
         if (!(getGeometry() == null && that.getGeometry() == null) && !getGeometry().equals(that.getGeometry())) {
             return false;
         }
-        if (getSrid() != null ? !getSrid().equals(that.getSrid()) : that.getSrid() != null) {
-            return false;
-        }
-        return getTiles() != null ? getTiles().equals(that.getTiles()) : that.getTiles() == null;
+        
+        return getSrid() != null ? getSrid().equals(that.getSrid()) : that.getSrid() == null;
     }
 
     @Override
@@ -71,7 +57,6 @@ public class GeometryAttribute {
         }
 
         result = 31 * result + (getSrid() != null ? getSrid().hashCode() : 0);
-        result = 31 * result + (getTiles() != null ? getTiles().hashCode() : 0);
         return result;
     }
 }

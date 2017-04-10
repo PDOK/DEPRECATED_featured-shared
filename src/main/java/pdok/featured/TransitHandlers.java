@@ -48,9 +48,7 @@ public class TransitHandlers {
             String type = (String) list.get(0);
             Object geometry = list.get(1);
             Integer srid = (Integer) list.get(2);
-            Set<Integer> tiles = (Set<Integer>) list.get(3);
             GeometryAttribute ga = new GeometryAttribute(type, geometry, srid);
-            ga.setTiles(tiles);
             return ga;
         }
     }
@@ -68,7 +66,6 @@ public class TransitHandlers {
             ga.add(geometryAttribute.getType());
             ga.add(geometryAttribute.getGeometry());
             ga.add(geometryAttribute.getSrid());
-            ga.add(geometryAttribute.getTiles());
             return ga;
         }
     }

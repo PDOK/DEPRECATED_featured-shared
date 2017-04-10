@@ -4,7 +4,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.junit.Assert;
 import org.junit.Test;
-import pdok.featured.tiles.TilesHelper;
 
 public class TransitHandlersTest {
 
@@ -73,24 +72,9 @@ public class TransitHandlersTest {
         GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" "
                 + "srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517"
                 + "</gml:pos></gml:Point>");
-        ga.setTiles(TilesHelper.nl(ga));
         String serial = Serializer.toJson(ga);
 
         GeometryAttribute deserial = (GeometryAttribute) Serializer.fromJson(serial);
         Assert.assertEquals(ga, deserial);
-    }
-
-    @Test
-    public void GeometryAttributeNoTilesTest() throws ClassNotFoundException {
-        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" "
-                + "srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517"
-                + "</gml:pos></gml:Point>", 28992);
-        String serial = Serializer.toJson(ga);
-
-        GeometryAttribute deserial = (GeometryAttribute) Serializer.fromJson(serial);
-        Assert.assertEquals(ga, deserial);
-
-        ga.setTiles(TilesHelper.nl(ga));
-        Assert.assertNotEquals(ga, deserial);
     }
 }
