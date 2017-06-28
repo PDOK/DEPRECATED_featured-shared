@@ -186,6 +186,6 @@
                               (geometry-attribute-dispatcher obj)))
 (defmethod as-stufgeo-gml-lc "gml" [^GeometryAttribute obj]
            (when (.getGeometry obj)
-                 (map-replace (as-stufgeo-gml obj) #"(<imgeo:multiVlak>.+</imgeo:multiVlak>)" "<imgeo:multivlak>$1</imgeo:multivlak>"
-                              #"(<imgeo:multiPunt>.+</imgeo:multiPunt>)" "<imgeo:multipunt>$1</imgeo:multipunt>")))
+                 (map-replace (as-stufgeo-gml obj) #"<imgeo:multiVlak>(.+)</imgeo:multiVlak>" "<imgeo:multivlak>$1</imgeo:multivlak>"
+                              #"<imgeo:multiPunt>(.+)</imgeo:multiPunt>" "<imgeo:multipunt>$1</imgeo:multipunt>")))
 (defmethod as-stufgeo-gml-lc :default [_] nil)
