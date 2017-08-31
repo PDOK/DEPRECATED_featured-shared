@@ -1,19 +1,19 @@
 package pdok.featured.converters;
 
+import static rdnaptrans.Transform.rdnap2etrs;
+
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.CoordinateSequence;
 import com.vividsolutions.jts.geom.CoordinateSequenceFactory;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequence;
 import com.vividsolutions.jts.geom.impl.CoordinateArraySequenceFactory;
 import java.io.IOException;
-import static rdnaptrans.Transform.rdnap2etrs;
-import rdnaptrans.value.Geographic;
 import rdnaptrans.value.Cartesian;
+import rdnaptrans.value.Geographic;
 
 public class RDToETRS89SequenceFactory implements CoordinateSequenceFactory {
 
     public CoordinateSequence create(Coordinate[] coordinates) {
-
         Coordinate[] result = new Coordinate[coordinates.length];
 
         for (int i = 0; i < coordinates.length; i++) {

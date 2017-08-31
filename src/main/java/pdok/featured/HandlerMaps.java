@@ -1,19 +1,16 @@
 package pdok.featured;
 
-import com.cognitect.transit.*;
+import com.cognitect.transit.ReadHandler;
+import com.cognitect.transit.WriteHandler;
+import java.util.HashMap;
+import java.util.Map;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by raymond on 2-8-16.
- */
 public class HandlerMaps {
 
-    public static Map<Class, WriteHandler<?,?>> writers;
-    public static Map<String, ReadHandler<?,?>> readers;
+    public static Map<Class, WriteHandler<?, ?>> writers;
+    public static Map<String, ReadHandler<?, ?>> readers;
 
     static {
         writers = new HashMap<>();
@@ -30,5 +27,4 @@ public class HandlerMaps {
         readers.put("I", new TransitHandlers.IntegerReadHandler());
         readers.put("ga", new TransitHandlers.GeometryAttributeReadHandler());
     }
-
 }

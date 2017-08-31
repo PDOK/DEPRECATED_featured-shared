@@ -1,8 +1,5 @@
 package pdok.featured;
 
-/**
- * Created by raymond on 2-8-16.
- */
 public class NilAttribute {
 
     public final Class clazz;
@@ -22,8 +19,12 @@ public class NilAttribute {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         NilAttribute that = (NilAttribute) o;
 

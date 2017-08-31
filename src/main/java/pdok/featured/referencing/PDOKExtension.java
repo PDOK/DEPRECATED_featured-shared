@@ -4,10 +4,6 @@ import java.net.URL;
 import org.geotools.factory.Hints;
 import org.geotools.referencing.factory.epsg.FactoryUsingWKT;
 
-/**
- *
- * @author kroonr
- */
 public class PDOKExtension extends FactoryUsingWKT {
 
     public static final String FILENAME = "pdok.properties";

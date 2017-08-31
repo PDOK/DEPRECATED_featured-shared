@@ -1,10 +1,7 @@
 package pdok.featured;
 
-import java.util.*;
+import java.util.Set;
 
-/**
- * Created by stroej on 23-9-2016.
- */
 public class GeometryAttribute {
 
     private String type;
@@ -22,43 +19,54 @@ public class GeometryAttribute {
         this.srid = srid;
     }
 
-    public String getType() {return type;
+    public String getType() {
+        return type;
     }
 
     public Object getGeometry() {
         return geometry;
     }
 
-    public Integer getSrid() { return srid;
+    public Integer getSrid() {
+        return srid;
     }
 
-    public Set<Integer> getTiles(){
+    public Set<Integer> getTiles() {
         return tiles;
     }
 
     // the tiles will be computed outside of this class, so a set-method is necessary
-    public void setTiles (Set<Integer> tiles){
+    public void setTiles(Set<Integer> tiles) {
         this.tiles = tiles;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         GeometryAttribute that = (GeometryAttribute) o;
 
-        if (!getType().equals(that.getType())) return false;
-        if (!(getGeometry() == null && that.getGeometry() == null) && !getGeometry().equals(that.getGeometry())) return false;
-        if (getSrid() != null ? !getSrid().equals(that.getSrid()) : that.getSrid() != null) return false;
+        if (!getType().equals(that.getType())) {
+            return false;
+        }
+        if (!(getGeometry() == null && that.getGeometry() == null) && !getGeometry().equals(that.getGeometry())) {
+            return false;
+        }
+        if (getSrid() != null ? !getSrid().equals(that.getSrid()) : that.getSrid() != null) {
+            return false;
+        }
         return getTiles() != null ? getTiles().equals(that.getTiles()) : that.getTiles() == null;
-
     }
 
     @Override
     public int hashCode() {
         int result = getType().hashCode();
-        if (getGeometry() != null ) {
+        if (getGeometry() != null) {
             result = 31 * result + getGeometry().hashCode();
         }
 
@@ -67,6 +75,3 @@ public class GeometryAttribute {
         return result;
     }
 }
-
-
-

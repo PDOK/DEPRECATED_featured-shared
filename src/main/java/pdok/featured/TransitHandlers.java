@@ -2,14 +2,15 @@ package pdok.featured;
 
 import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
-import org.joda.time.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 
-import java.util.*;
-
-/**
- * Created by raymond on 2-8-16.
- */
 public class TransitHandlers {
+
     /* This determines how LocalDate(Time)s are interpreted. The milliseconds in the database are always in UTC, i.e.
      * LOCAL_TIME_ZONE = UTC -> LocalDateTime 1970-01-01 00:00 = timestamp 0
      * LOCAL_TIME_ZONE = Europe/Amsterdam -> LocalDateTime 1970-01-01 01:00 = timestamp 0 */
@@ -43,7 +44,7 @@ public class TransitHandlers {
     public static class GeometryAttributeReadHandler implements ReadHandler<GeometryAttribute, List<Object>> {
 
         @Override
-        public GeometryAttribute fromRep(List<Object> list){
+        public GeometryAttribute fromRep(List<Object> list) {
             String type = (String) list.get(0);
             Object geometry = list.get(1);
             Integer srid = (Integer) list.get(2);
@@ -54,10 +55,12 @@ public class TransitHandlers {
         }
     }
 
-    public static class GeometryAttributeWriteHandler extends AbstractWriteHandler<GeometryAttribute, Object>{
+    public static class GeometryAttributeWriteHandler extends AbstractWriteHandler<GeometryAttribute, Object> {
 
         @Override
-        public String tag(GeometryAttribute geometryAttribute) { return "ga"; }
+        public String tag(GeometryAttribute geometryAttribute) {
+            return "ga";
+        }
 
         @Override
         public List<Object> rep(GeometryAttribute geometryAttribute) {
@@ -90,7 +93,6 @@ public class TransitHandlers {
             return o.toDateTime(LOCAL_TIME_ZONE).getMillis();
         }
     }
-
 
     public static class JodaLocalDateReadHandler implements ReadHandler<LocalDate, Long> {
 
@@ -133,5 +135,4 @@ public class TransitHandlers {
             return o.toString();
         }
     }
-
 }

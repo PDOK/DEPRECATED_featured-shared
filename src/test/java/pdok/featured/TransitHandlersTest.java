@@ -6,10 +6,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import pdok.featured.tiles.TilesHelper;
 
-
-/**
- * Created by raymond on 2-8-16.
- */
 public class TransitHandlersTest {
 
     @Test
@@ -21,7 +17,7 @@ public class TransitHandlersTest {
 
         Assert.assertEquals(ldt, deserial);
     }
-    
+
     @Test
     public void LocalDateTimeZeroTest() {
         LocalDateTime ldt = new LocalDateTime(1970, 1, 1, 1, 0, 0);
@@ -63,19 +59,20 @@ public class TransitHandlersTest {
 
     @Test
     public void GeometryAttributeTest() throws ClassNotFoundException {
-
-        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517</gml:pos></gml:Point>", 28992);
+        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" "
+                + "srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517"
+                + "</gml:pos></gml:Point>", 28992);
         String serial = Serializer.toJson(ga);
 
         GeometryAttribute deserial = (GeometryAttribute) Serializer.fromJson(serial);
         Assert.assertEquals(ga, deserial);
-
     }
 
     @Test
     public void GeometryAttributeSridIsNullTest() throws ClassNotFoundException {
-
-        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517</gml:pos></gml:Point>");
+        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" "
+                + "srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517"
+                + "</gml:pos></gml:Point>");
         ga.setTiles(TilesHelper.nl(ga));
         String serial = Serializer.toJson(ga);
 
@@ -83,11 +80,11 @@ public class TransitHandlersTest {
         Assert.assertEquals(ga, deserial);
     }
 
-
     @Test
     public void GeometryAttributeNoTilesTest() throws ClassNotFoundException {
-
-        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517</gml:pos></gml:Point>", 28992);
+        GeometryAttribute ga = new GeometryAttribute("gml", "<gml:Point xmlns:gml=\"http://www.opengis.net/gml/3.2\" "
+                + "srsName=\"urn:ogc:def:crs:EPSG::28992\" gml:id=\"LOCAL_ID_1\"><gml:pos>131411.071 481481.517"
+                + "</gml:pos></gml:Point>", 28992);
         String serial = Serializer.toJson(ga);
 
         GeometryAttribute deserial = (GeometryAttribute) Serializer.fromJson(serial);
@@ -96,7 +93,4 @@ public class TransitHandlersTest {
         ga.setTiles(TilesHelper.nl(ga));
         Assert.assertNotEquals(ga, deserial);
     }
-
-
-
 }
