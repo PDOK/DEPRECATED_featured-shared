@@ -1,7 +1,9 @@
 package pdok.featured;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Test;
@@ -973,6 +975,54 @@ public class GMLParserTest {
             + "</gml:curveMember>"
             + "</gml:MultiCurve>";
 
+    public static final String GML_SRS_URL_EPSG_0_4_CHARS = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/0/4258\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/0/28992\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
+    public static final String GML_SRS_URL_EPSG_0_5_CHARS = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/0/28992\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/0/28992\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
+    public static final String GML_SRS_URL_EPSG_85_8_CHARS = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/8.5/69036405\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/EPSG/8.5/69036405\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
+    public static final String GML_SRS_URL_AUTO_5_CHARS = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/AUTO/1.3/42001\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/AUTO/1.3/42001\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
+    public static final String GML_SRS_URL_OGC_CHARS = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/OGC/0/_TruncatedJulianDate_template\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.opengis.net/def/crs/OGC/0/_TruncatedJulianDate_template\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
+    public static final String GML_SRS_NOT_OPENGIS_URL = "<gml:Polygon "
+            + "gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.google.nl/def/crs/OGC/0/_TruncatedJulianDate_template\" srsDimension=\"2\">"
+            + "</gml:Polygon>"
+            + "<gml:Polygon gml:id=\"_48b11b1f-8686-4936-b994-9c0d9b37d76b\" "
+            + "srsName=\"http://www.google.nl/def/crs/OGC/0/_TruncatedJulianDate_template\" srsDimension=\"2\">"
+            + "</gml:Polygon>";
+
     @Test
     public void testGML3_2_1_Arc() throws Exception {
         Geometry geometry = GMLParser.parse(GML_3_2_1_ARC);
@@ -1069,5 +1119,59 @@ public class GMLParserTest {
         Geometry geometry = GMLParser.parse(GML3_2_1_POLYGON_3D);
         assertNotNull(geometry);
         assertEquals(28992, geometry.getSRID());
+    }
+
+    @Test
+    public void testSrsNameUrlAnalyzer4chars() {
+        assertTrue(GML_SRS_URL_EPSG_0_4_CHARS.contains("srsName=\"http://www.opengis"));
+        assertFalse(GML_SRS_URL_EPSG_0_4_CHARS.contains("srsName=\"EPSG:4258\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_URL_EPSG_0_4_CHARS);
+        assertFalse(gml.contains("srsName=\"http://www.opengis"));
+        assertTrue(gml.contains("srsName=\"EPSG:4258\""));
+    }
+
+    @Test
+    public void testSrsNameUrlAnalyzer5chars() {
+        assertTrue(GML_SRS_URL_EPSG_0_5_CHARS.contains("srsName=\"http://www.opengis"));
+        assertFalse(GML_SRS_URL_EPSG_0_5_CHARS.contains("srsName=\"EPSG:28992\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_URL_EPSG_0_5_CHARS);
+        assertFalse(gml.contains("srsName=\"http://www.opengis"));
+        assertTrue(gml.contains("srsName=\"EPSG:28992\""));
+    }
+
+    @Test
+    public void testSrsNameUrlAnalyzer8chars() {
+        assertTrue(GML_SRS_URL_EPSG_85_8_CHARS.contains("srsName=\"http://www.opengis"));
+        assertFalse(GML_SRS_URL_EPSG_85_8_CHARS.contains("srsName=\"EPSG:69036405\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_URL_EPSG_85_8_CHARS);
+        assertFalse(gml.contains("srsName=\"http://www.opengis"));
+        assertTrue(gml.contains("srsName=\"EPSG:69036405\""));
+    }
+
+    @Test
+    public void testSrsNameUrlAnalyzerAuto5chars() {
+        assertTrue(GML_SRS_URL_AUTO_5_CHARS.contains("srsName=\"http://www.opengis"));
+        assertFalse(GML_SRS_URL_AUTO_5_CHARS.contains("srsName=\"AUTO:42001\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_URL_AUTO_5_CHARS);
+        assertFalse(gml.contains("srsName=\"http://www.opengis"));
+        assertTrue(gml.contains("srsName=\"AUTO:42001\""));
+    }
+
+    @Test
+    public void testSrsNameUrlAnalyzerOgc29chars() {
+        assertTrue(GML_SRS_URL_OGC_CHARS.contains("srsName=\"http://www.opengis"));
+        assertFalse(GML_SRS_URL_OGC_CHARS.contains("srsName=\"OGC:_TruncatedJulianDate_template\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_URL_OGC_CHARS);
+        assertFalse(gml.contains("srsName=\"http://www.opengis"));
+        assertTrue(gml.contains("srsName=\"OGC:_TruncatedJulianDate_template\""));
+    }
+
+    @Test
+    public void testSrsNameNotOpengisUrlAnalyzerOgc29chars() {
+        assertTrue(GML_SRS_NOT_OPENGIS_URL.contains("srsName=\"http://www.google"));
+        assertFalse(GML_SRS_NOT_OPENGIS_URL.contains("srsName=\"OGC:_TruncatedJulianDate_template\""));
+        String gml = GMLParser.srsNameUrlAnalyzer(GML_SRS_NOT_OPENGIS_URL);
+        assertTrue(gml.contains("srsName=\"http://www.google"));
+        assertFalse(gml.contains("srsName=\"OGC:_TruncatedJulianDate_template\""));
     }
 }
