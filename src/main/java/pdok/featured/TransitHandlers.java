@@ -3,6 +3,8 @@ package pdok.featured;
 import com.cognitect.transit.ReadHandler;
 import com.cognitect.transit.impl.AbstractWriteHandler;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import org.joda.time.DateTimeZone;
@@ -45,12 +47,29 @@ public class TransitHandlers {
 
         @Override
         public GeometryAttribute fromRep(List<Object> list) {
-            String type = (String) list.get(0);
-            Object geometry = list.get(1);
-            Integer srid = (Integer) list.get(2);
-            Set<Integer> tiles = (Set<Integer>) list.get(3);
-            GeometryAttribute ga = new GeometryAttribute(type, geometry, srid);
-            ga.setTiles(tiles);
+            final Iterator<Object> itr = list.iterator();
+            
+            if (!itr.hasNext()) {
+                throw new IllegalArgumentException("geometry type field missing");
+            }
+            final String type = (String) itr.next();
+            
+            if (!itr.hasNext()) {
+                throw new IllegalArgumentException("geometry field missing");
+            }
+            final Object geometry = itr.next();
+            
+            if (!itr.hasNext()) {
+                throw new IllegalArgumentException("srid field missing");
+            }
+            final Integer srid = (Integer) itr.next();
+            
+            final GeometryAttribute ga = new GeometryAttribute(type, geometry, srid);
+            if (itr.hasNext()) {
+                final Set<Integer> tiles = (Set<Integer>) itr.next();
+                ga.setTiles(tiles);
+            }
+            
             return ga;
         }
     }
@@ -68,7 +87,11 @@ public class TransitHandlers {
             ga.add(geometryAttribute.getType());
             ga.add(geometryAttribute.getGeometry());
             ga.add(geometryAttribute.getSrid());
-            ga.add(geometryAttribute.getTiles());
+            
+            Set<Integer> tiles = geometryAttribute.getTiles();
+            if (tiles != null) {
+                ga.add(tiles);
+            }
             return ga;
         }
     }
